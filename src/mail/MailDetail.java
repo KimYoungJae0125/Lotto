@@ -3,6 +3,7 @@ package mail;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class MailDetail {
@@ -23,11 +24,9 @@ public class MailDetail {
         while(lottoNumbers.size() < 6) {
             lottoNumbers.add(new Random().ints(1, 45).findAny().getAsInt());
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append("[ ");
-        sb.append(lottoNumbers.stream().sorted().map(String::valueOf).collect(Collectors.joining(", ")));
-        sb.append(" ]");
+        StringJoiner sj = new StringJoiner(", ", "[ ", " ]");
+        lottoNumbers.stream().sorted().map(String::valueOf).forEach(sj::add);
 
-        return sb.toString();
+        return sj.toString();
     }
 }
