@@ -12,21 +12,26 @@ public class MailDetail {
         return "자바 프로그램";
     }
     public String body() {
+        String[] body = new String[6];
+        body[0] = "<h1>금주의 로또 번호</h1>";
+        for(int i = 0; i<5; i++) {
+            body[i+1] = "<p>" + lottoNumber() + "</p>";
+        }
+
         return String.join(
                 System.getProperty("line.separator")
-                , "<h1>금주의 로또 번호<h1>"
-                , "<p>" + lottoNumber() + "<p>"
+                , body
         );
     }
 
     private String lottoNumber() {
-        Set<Integer> lottoNumbers = new HashSet<>();
-        while(lottoNumbers.size() < 6) {
-            lottoNumbers.add(new Random().ints(1, 45).findAny().getAsInt());
-        }
-        StringJoiner sj = new StringJoiner(", ", "[ ", " ]");
-        lottoNumbers.stream().sorted().map(String::valueOf).forEach(sj::add);
-
-        return sj.toString();
+        return new HashSet<>(){{
+            while(size() < 6) {
+                add(new Random().ints(1, 45).findAny().getAsInt());
+            }
+        }}.stream()
+          .sorted()
+          .map(String::valueOf)
+          .collect(Collectors.joining(", ", "[ ", " ]"));
     }
 }
